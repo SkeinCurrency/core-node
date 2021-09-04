@@ -1,17 +1,17 @@
-Dashcore Node
+Skeincoincore Node
 ============
 
-A Dash full node for building applications and services with Node.js. A node is extensible and can be configured to run additional services. At the minimum a node has an interface to [Dash Core (dashd) v0.13.0](https://github.com/dashpay/dash/tree/v0.13.0.x) for more advanced address queries. Additional services can be enabled to make a node more useful such as exposing new APIs, running a block explorer and wallet service.
+A Dash full node for building applications and services with Node.js. A node is extensible and can be configured to run additional services. At the minimum a node has an interface to [Skeincoin Core (dashd) v0.13.0](https://github.com/dashpay/dash/tree/v0.13.0.x) for more advanced address queries. Additional services can be enabled to make a node more useful such as exposing new APIs, running a block explorer and wallet service.
 
 ## Usages
 
 ### As a standalone server
 
 ```bash
-git clone https://github.com/dashevo/dashcore-node
-cd dashcore-node
+git clone https://github.com/skeinetwork/skeincoincore-node
+cd skeincoincore-node
 npm install
-./bin/dashcore-node start
+./bin/skeincoincore-node start
 ```
 
 When running the start command, it will seek for a .dashcore folder with a dashcore-node.json conf file.
@@ -19,8 +19,8 @@ If it doesn't exist, it will create it, with basic task to connect to dashd.
 
 Some plugins are available :
 
-- Insight-API : `./bin/dashcore-node addservice @dashevo/insight-api`
-- Insight-UI : `./bin/dashcore-node addservice @dashevo/insight-ui`
+- Insight-API : `./bin/dashcore-node addservice @skeincoin/insight-api`
+- Insight-UI : `./bin/dashcore-node addservice @skeincoin/insight-ui`
 
 You also might want to add these index to your dash.conf file :
 ```
@@ -32,12 +32,12 @@ You also might want to add these index to your dash.conf file :
 ### As a library
 
 ```bash
-npm install @dashevo/dashcore-node
+npm install @skeincoin/skeincoincore-node
 ```
 
 ```javascript
-const dashcore = require('@dashevo/dashcore-node');
-const config = require('./dashcore-node.json');
+const dashcore = require('@skeinetwork/skeincoincore-node');
+const config = require('./skeincoincore-node.json');
 
 let node = dashcore.scaffold.start({ path: "", config: config });
 node.on('ready', function() {
@@ -50,7 +50,7 @@ node.on('ready', function() {
 
 ## Prerequisites
 
-- Dash Core (dashd) (v0.13.0) with support for additional indexing *(see above)*
+- Skeincoin Core (Skeincoin) (v0.13.0) with support for additional indexing *(see above)*
 - Node.js v8+
 - ZeroMQ *(libzmq3-dev for Ubuntu/Debian or zeromq on OSX)*
 - ~20GB of disk storage
@@ -58,7 +58,7 @@ node.on('ready', function() {
 
 ## Configuration
 
-Dashcore includes a Command Line Interface (CLI) for managing, configuring and interfacing with your Dashcore Node.
+Skeincoin includes a Command Line Interface (CLI) for managing, configuring and interfacing with your Dashcore Node.
 
 ```bash
 dashcore-node create -d <dash-data-dir> mynode
