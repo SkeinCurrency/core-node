@@ -5,8 +5,8 @@ var path = require('path');
 var EventEmitter = require('events').EventEmitter;
 var should = require('chai').should();
 var crypto = require('crypto');
-var dashcore = require('@dashevo/dashcore-lib');
-var _ = dashcore.deps._;
+var skeincore = require('@skeincurrency/core-lib');
+var _ = skeincore.deps._;
 var sinon = require('sinon');
 var proxyquire = require('proxyquire');
 var fs = require('fs');
@@ -16,7 +16,7 @@ var index = require('../../lib');
 var log = index.log;
 var errors = index.errors;
 
-var Transaction = dashcore.Transaction;
+var Transaction = skeincore.Transaction;
 var readFileSync = sinon.stub().returns(fs.readFileSync(path.resolve(__dirname, '../data/dash.conf')));
 var DashService = proxyquire('../../lib/services/dashd', {
   fs: {
@@ -30,7 +30,7 @@ describe('Dash Service', function() {
 
   var baseConfig = {
     node: {
-      network: dashcore.Networks.testnet
+      network: skeincore.Networks.testnet
     },
     spawn: {
       datadir: 'testdir',
@@ -420,8 +420,8 @@ describe('Dash Service', function() {
       });
       var config = {
         node: {
-          network: dashcore.Networks.testnet,
-          configPath: '/tmp/.dashcore/dashcore-node.json'
+          network: skeincore.Networks.testnet,
+          configPath: '/tmp/.skeincore/core-node.json'
         },
         spawn: {
           datadir: './data',
@@ -432,7 +432,7 @@ describe('Dash Service', function() {
       dashd.options.spawn.datadir = './data';
       var node = {};
       dashd._loadSpawnConfiguration(node);
-      dashd.options.spawn.datadir.should.equal('/tmp/.dashcore/data');
+      dashd.options.spawn.datadir.should.equal('/tmp/.skeincore/data');
     });
     it('should throw an exception if txindex isn\'t enabled in the configuration', function() {
       var TestDash = proxyquire('../../lib/services/dashd', {
@@ -447,7 +447,7 @@ describe('Dash Service', function() {
       var dashd = new TestDash(baseConfig);
       (function() {
         dashd._loadSpawnConfiguration({datadir: './test'});
-      }).should.throw(dashcore.errors.InvalidState);
+      }).should.throw(skeincore.errors.InvalidState);
     });
     it('should NOT set https options if node https options are set', function() {
       var writeFileSync = function(path, config) {
@@ -662,7 +662,7 @@ describe('Dash Service', function() {
     });
     it('will set height and genesis buffer', function(done) {
       var dashd = new DashService(baseConfig);
-      var genesisBuffer = new Buffer([]);
+      var genesisBuffer = Buffer.from([]);
       dashd.getRawBlock = sinon.stub().callsArgWith(1, null, genesisBuffer);
       dashd.nodes.push({
         client: {
@@ -771,13 +771,13 @@ describe('Dash Service', function() {
 
   describe('#_getDefaultConf', function() {
     afterEach(function() {
-      dashcore.Networks.disableRegtest();
-      baseConfig.node.network = dashcore.Networks.testnet;
+      skeincore.Networks.disableRegtest();
+      baseConfig.node.network = skeincore.Networks.testnet;
     });
     it('will get default rpc port for livenet', function() {
       var config = {
         node: {
-          network: dashcore.Networks.livenet
+          network: skeincore.Networks.livenet
         },
         spawn: {
           datadir: 'testdir',
@@ -790,7 +790,7 @@ describe('Dash Service', function() {
     it('will get default rpc port for testnet', function() {
       var config = {
         node: {
-          network: dashcore.Networks.testnet
+          network: skeincore.Networks.testnet
         },
         spawn: {
           datadir: 'testdir',
@@ -801,10 +801,10 @@ describe('Dash Service', function() {
       dashd._getDefaultConf().rpcport.should.equal(19998);
     });
     it('will get default rpc port for regtest', function() {
-      dashcore.Networks.enableRegtest();
+      skeincore.Networks.enableRegtest();
       var config = {
         node: {
-          network: dashcore.Networks.testnet
+          network: skeincore.Networks.testnet
         },
         spawn: {
           datadir: 'testdir',
@@ -818,13 +818,13 @@ describe('Dash Service', function() {
 
   describe('#_getNetworkConfigPath', function() {
     afterEach(function() {
-      dashcore.Networks.disableRegtest();
-      baseConfig.node.network = dashcore.Networks.testnet;
+      skeincore.Networks.disableRegtest();
+      baseConfig.node.network = skeincore.Networks.testnet;
     });
     it('will get default config path for livenet', function() {
       var config = {
         node: {
-          network: dashcore.Networks.livenet
+          network: skeincore.Networks.livenet
         },
         spawn: {
           datadir: 'testdir',
@@ -837,7 +837,7 @@ describe('Dash Service', function() {
     it('will get default rpc port for testnet', function() {
       var config = {
         node: {
-          network: dashcore.Networks.testnet
+          network: skeincore.Networks.testnet
         },
         spawn: {
           datadir: 'testdir',
@@ -848,10 +848,10 @@ describe('Dash Service', function() {
       dashd._getNetworkConfigPath().should.equal('testnet3/dash.conf');
     });
     it('will get default rpc port for regtest', function() {
-      dashcore.Networks.enableRegtest();
+      skeincore.Networks.enableRegtest();
       var config = {
         node: {
-          network: dashcore.Networks.testnet
+          network: skeincore.Networks.testnet
         },
         spawn: {
           datadir: 'testdir',
@@ -865,24 +865,24 @@ describe('Dash Service', function() {
 
   describe('#_getNetworkOption', function() {
     afterEach(function() {
-      dashcore.Networks.disableRegtest();
-      baseConfig.node.network = dashcore.Networks.testnet;
+      skeincore.Networks.disableRegtest();
+      baseConfig.node.network = skeincore.Networks.testnet;
     });
     it('return --testnet for testnet', function() {
       var dashd = new DashService(baseConfig);
-      dashd.node.network = dashcore.Networks.testnet;
+      dashd.node.network = skeincore.Networks.testnet;
       dashd._getNetworkOption().should.equal('--testnet');
     });
     it('return --regtest for testnet', function() {
       var dashd = new DashService(baseConfig);
-      dashd.node.network = dashcore.Networks.testnet;
-      dashcore.Networks.enableRegtest();
+      dashd.node.network = skeincore.Networks.testnet;
+      skeincore.Networks.enableRegtest();
       dashd._getNetworkOption().should.equal('--regtest');
     });
     it('return undefined for livenet', function() {
       var dashd = new DashService(baseConfig);
-      dashd.node.network = dashcore.Networks.livenet;
-      dashcore.Networks.enableRegtest();
+      dashd.node.network = skeincore.Networks.livenet;
+      skeincore.Networks.enableRegtest();
       should.equal(dashd._getNetworkOption(), undefined);
     });
   });
@@ -891,7 +891,7 @@ describe('Dash Service', function() {
     it('will emit block', function(done) {
       var dashd = new DashService(baseConfig);
       var node = {};
-      var message = new Buffer('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
+      var message = Buffer.from('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
       dashd._rapidProtectedUpdateTip = sinon.stub();
       dashd.on('block', function(block) {
         block.should.equal(message);
@@ -902,7 +902,7 @@ describe('Dash Service', function() {
     it('will not emit same block twice', function(done) {
       var dashd = new DashService(baseConfig);
       var node = {};
-      var message = new Buffer('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
+      var message = Buffer.from('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
       dashd._rapidProtectedUpdateTip = sinon.stub();
       dashd.on('block', function(block) {
         block.should.equal(message);
@@ -914,7 +914,7 @@ describe('Dash Service', function() {
     it('will call function to update tip', function() {
       var dashd = new DashService(baseConfig);
       var node = {};
-      var message = new Buffer('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
+      var message = Buffer.from('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
       dashd._rapidProtectedUpdateTip = sinon.stub();
       dashd._zmqBlockHandler(node, message);
       dashd._rapidProtectedUpdateTip.callCount.should.equal(1);
@@ -924,7 +924,7 @@ describe('Dash Service', function() {
     it('will emit to subscribers', function(done) {
       var dashd = new DashService(baseConfig);
       var node = {};
-      var message = new Buffer('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
+      var message = Buffer.from('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
       dashd._rapidProtectedUpdateTip = sinon.stub();
       var emitter = new EventEmitter();
       dashd.subscriptions.hashblock.push(emitter);
@@ -948,7 +948,7 @@ describe('Dash Service', function() {
         }
       };
       var node = {};
-      var message = new Buffer('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
+      var message = Buffer.from('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
       var count = 0;
       function repeat() {
         dashd._rapidProtectedUpdateTip(node, message);
@@ -963,7 +963,7 @@ describe('Dash Service', function() {
 
   describe('#_updateTip', function() {
     var sandbox = sinon.sandbox.create();
-    var message = new Buffer('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
+    var message = Buffer.from('00000000002e08fc7ae9a9aa5380e95e2adcdc5752a4a66a7d3a22466bd4e6aa', 'hex');
     beforeEach(function() {
       sandbox.stub(log, 'error');
       sandbox.stub(log, 'info');
@@ -1073,7 +1073,7 @@ describe('Dash Service', function() {
     it('will not call syncPercentage if node is stopping', function(done) {
       var config = {
         node: {
-          network: dashcore.Networks.testnet
+          network: skeincore.Networks.testnet
         },
         spawn: {
           datadir: 'testdir',
@@ -1102,17 +1102,17 @@ describe('Dash Service', function() {
   });
 
   describe('#_getAddressesFromTransaction', function() {
-    it('will get results using dashcore.Transaction', function() {
+    it('will get results using skeincore.Transaction', function() {
       var dashd = new DashService(baseConfig);
       var wif = 'XGLgPK8gbmzU7jcbw34Pj55AXV7SmG6carKuiwtu4WtvTjyTbpwX';
-      var privkey = dashcore.PrivateKey.fromWIF(wif);
-      var inputAddress = privkey.toAddress(dashcore.Networks.testnet);
-      var outputAddress = dashcore.Address('8oUSpiq5REeEKAzS1qSXoJbZ9TRfH1L6mi');
-      var tx = dashcore.Transaction();
+      var privkey = skeincore.PrivateKey.fromWIF(wif);
+      var inputAddress = privkey.toAddress(skeincore.Networks.testnet);
+      var outputAddress = skeincore.Address('8oUSpiq5REeEKAzS1qSXoJbZ9TRfH1L6mi');
+      var tx = skeincore.Transaction();
       tx.from({
         txid: '4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b',
         outputIndex: 0,
-        script: dashcore.Script(inputAddress),
+        script: skeincore.Script(inputAddress),
         address: inputAddress.toString(),
         satoshis: 5000000000
       });
@@ -1125,18 +1125,18 @@ describe('Dash Service', function() {
     });
     it('will handle non-standard script types', function() {
       var dashd = new DashService(baseConfig);
-      var tx = dashcore.Transaction();
-      tx.addInput(dashcore.Transaction.Input({
+      var tx = skeincore.Transaction();
+      tx.addInput(skeincore.Transaction.Input({
         prevTxId: '4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b',
-        script: dashcore.Script('OP_TRUE'),
+        script: skeincore.Script('OP_TRUE'),
         outputIndex: 1,
         output: {
-          script: dashcore.Script('OP_TRUE'),
+          script: skeincore.Script('OP_TRUE'),
           satoshis: 5000000000
         }
       }));
-      tx.addOutput(dashcore.Transaction.Output({
-        script: dashcore.Script('OP_TRUE'),
+      tx.addOutput(skeincore.Transaction.Output({
+        script: skeincore.Script('OP_TRUE'),
         satoshis: 5000000000
       }));
       var addresses = dashd._getAddressesFromTransaction(tx);
@@ -1144,9 +1144,9 @@ describe('Dash Service', function() {
     });
     it('will handle unparsable script types or missing input script', function() {
       var dashd = new DashService(baseConfig);
-      var tx = dashcore.Transaction();
-      tx.addOutput(dashcore.Transaction.Output({
-        script: new Buffer('4c', 'hex'),
+      var tx = skeincore.Transaction();
+      tx.addOutput(skeincore.Transaction.Output({
+        script: Buffer.from('4c', 'hex'),
         satoshis: 5000000000
       }));
       var addresses = dashd._getAddressesFromTransaction(tx);
@@ -1154,14 +1154,14 @@ describe('Dash Service', function() {
     });
     it('will return unique values', function() {
       var dashd = new DashService(baseConfig);
-      var tx = dashcore.Transaction();
-      var address = dashcore.Address('8oUSpiq5REeEKAzS1qSXoJbZ9TRfH1L6mi');
-      tx.addOutput(dashcore.Transaction.Output({
-        script: dashcore.Script(address),
+      var tx = skeincore.Transaction();
+      var address = skeincore.Address('8oUSpiq5REeEKAzS1qSXoJbZ9TRfH1L6mi');
+      tx.addOutput(skeincore.Transaction.Output({
+        script: skeincore.Script(address),
         satoshis: 5000000000
       }));
-      tx.addOutput(dashcore.Transaction.Output({
-        script: dashcore.Script(address),
+      tx.addOutput(skeincore.Transaction.Output({
+        script: skeincore.Script(address),
         satoshis: 5000000000
       }));
       var addresses = dashd._getAddressesFromTransaction(tx);
@@ -1203,7 +1203,7 @@ describe('Dash Service', function() {
   describe('#_zmqTransactionHandler', function() {
     it('will emit to subscribers', function(done) {
       var dashd = new DashService(baseConfig);
-      var expectedBuffer = new Buffer(txhex, 'hex');
+      var expectedBuffer = Buffer.from(txhex, 'hex');
       var emitter = new EventEmitter();
       dashd.subscriptions.rawtransaction.push(emitter);
       emitter.on('dashd/rawtransaction', function(hex) {
@@ -1216,7 +1216,7 @@ describe('Dash Service', function() {
     });
     it('will NOT emit to subscribers more than once for the same tx', function(done) {
       var dashd = new DashService(baseConfig);
-      var expectedBuffer = new Buffer(txhex, 'hex');
+      var expectedBuffer = Buffer.from(txhex, 'hex');
       var emitter = new EventEmitter();
       dashd.subscriptions.rawtransaction.push(emitter);
       emitter.on('dashd/rawtransaction', function() {
@@ -1228,7 +1228,7 @@ describe('Dash Service', function() {
     });
     it('will emit "tx" event', function(done) {
       var dashd = new DashService(baseConfig);
-      var expectedBuffer = new Buffer(txhex, 'hex');
+      var expectedBuffer = Buffer.from(txhex, 'hex');
       dashd.on('tx', function(buffer) {
         buffer.should.be.instanceof(Buffer);
         buffer.toString('hex').should.equal(expectedBuffer.toString('hex'));
@@ -1239,7 +1239,7 @@ describe('Dash Service', function() {
     });
     it('will NOT emit "tx" event more than once for the same tx', function(done) {
       var dashd = new DashService(baseConfig);
-      var expectedBuffer = new Buffer(txhex, 'hex');
+      var expectedBuffer = Buffer.from(txhex, 'hex');
       dashd.on('tx', function() {
         done();
       });
@@ -1253,7 +1253,7 @@ describe('Dash Service', function() {
   describe('#_zmqTransactionLockHandler', function() {
     it('will emit to subscribers', function(done) {
       var dashd = new DashService(baseConfig);
-      var expectedBuffer = new Buffer(txhex, 'hex');
+      var expectedBuffer = Buffer.from(txhex, 'hex');
       var emitter = new EventEmitter();
       dashd.subscriptions.transactionlock.push(emitter);
       emitter.on('dashd/transactionlock', function(hex) {
@@ -1266,7 +1266,7 @@ describe('Dash Service', function() {
     });
     it('will NOT emit to subscribers more than once for the same tx', function(done) {
       var dashd = new DashService(baseConfig);
-      var expectedBuffer = new Buffer(txhex, 'hex');
+      var expectedBuffer = Buffer.from(txhex, 'hex');
       var emitter = new EventEmitter();
       dashd.subscriptions.transactionlock.push(emitter);
       emitter.on('dashd/transactionlock', function() {
@@ -1278,7 +1278,7 @@ describe('Dash Service', function() {
     });
     it('will emit "tx" event', function(done) {
       var dashd = new DashService(baseConfig);
-      var expectedBuffer = new Buffer(txhex, 'hex');
+      var expectedBuffer = Buffer.from(txhex, 'hex');
       dashd.on('txlock', function(buffer) {
         buffer.should.be.instanceof(Buffer);
         buffer.toString('hex').should.equal(expectedBuffer.toString('hex'));
@@ -1289,7 +1289,7 @@ describe('Dash Service', function() {
     });
     it('will NOT emit "tx" event more than once for the same tx', function(done) {
       var dashd = new DashService(baseConfig);
-      var expectedBuffer = new Buffer(txhex, 'hex');
+      var expectedBuffer = Buffer.from(txhex, 'hex');
       dashd.on('txlock', function() {
         done();
       });
@@ -1355,7 +1355,7 @@ describe('Dash Service', function() {
     it('it will clear interval if node is stopping', function(done) {
       var config = {
         node: {
-          network: dashcore.Networks.testnet
+          network: skeincore.Networks.testnet
         },
         spawn: {
           datadir: 'testdir',
@@ -1436,8 +1436,8 @@ describe('Dash Service', function() {
         dashd._zmqTransactionHandler.callCount.should.equal(1);
         done();
       });
-      var topic = new Buffer('rawtx', 'utf8');
-      var message = new Buffer('abcdef', 'hex');
+      var topic = Buffer.from('rawtx', 'utf8');
+      var message = Buffer.from('abcdef', 'hex');
       node.zmqSubSocket.emit('message', topic, message);
     });
     it('will call relevant handler for hashblock topics', function(done) {
@@ -1452,8 +1452,8 @@ describe('Dash Service', function() {
         dashd._zmqBlockHandler.callCount.should.equal(1);
         done();
       });
-      var topic = new Buffer('hashblock', 'utf8');
-      var message = new Buffer('abcdef', 'hex');
+      var topic = Buffer.from('hashblock', 'utf8');
+      var message = Buffer.from('abcdef', 'hex');
       node.zmqSubSocket.emit('message', topic, message);
     });
     it('will ignore unknown topic types', function(done) {
@@ -1470,8 +1470,8 @@ describe('Dash Service', function() {
         dashd._zmqTransactionHandler.callCount.should.equal(0);
         done();
       });
-      var topic = new Buffer('unknown', 'utf8');
-      var message = new Buffer('abcdef', 'hex');
+      var topic = Buffer.from('unknown', 'utf8');
+      var message = Buffer.from('abcdef', 'hex');
       node.zmqSubSocket.emit('message', topic, message);
     });
   });
@@ -1773,7 +1773,7 @@ describe('Dash Service', function() {
     it('will exit spawn if shutdown', function() {
       var config = {
         node: {
-          network: dashcore.Networks.testnet
+          network: skeincore.Networks.testnet
         },
         spawn: {
           datadir: 'testdir',
@@ -1941,7 +1941,7 @@ describe('Dash Service', function() {
       });
       var config = {
         node: {
-          network: dashcore.Networks.testnet
+          network: skeincore.Networks.testnet
         },
         spawn: {
           datadir: 'testdir',
@@ -2048,7 +2048,7 @@ describe('Dash Service', function() {
     it('will give error if connecting while shutting down', function(done) {
       var config = {
         node: {
-          network: dashcore.Networks.testnet
+          network: skeincore.Networks.testnet
         },
         spawn: {
           datadir: 'testdir',
@@ -3373,10 +3373,10 @@ describe('Dash Service', function() {
   });
 
   describe('#_getAddressStrings', function() {
-    it('will get address strings from dashcore addresses', function() {
+    it('will get address strings from skeincore addresses', function() {
       var addresses = [
-        dashcore.Address('XjxDQFjTNEP9dcrJhBLvy5i1Dobz4x1LJN'),
-        dashcore.Address('7d5169eBcGHF4BYC6DTffTyeCpWbrZnNgz'),
+        skeincore.Address('XjxDQFjTNEP9dcrJhBLvy5i1Dobz4x1LJN'),
+        skeincore.Address('7d5169eBcGHF4BYC6DTffTyeCpWbrZnNgz'),
       ];
       var dashd = new DashService(baseConfig);
       var strings = dashd._getAddressStrings(addresses);
@@ -3395,7 +3395,7 @@ describe('Dash Service', function() {
     });
     it('will get address strings from mixture of types', function() {
       var addresses = [
-        dashcore.Address('XjxDQFjTNEP9dcrJhBLvy5i1Dobz4x1LJN'),
+        skeincore.Address('XjxDQFjTNEP9dcrJhBLvy5i1Dobz4x1LJN'),
         '7d5169eBcGHF4BYC6DTffTyeCpWbrZnNgz',
       ];
       var dashd = new DashService(baseConfig);
@@ -3405,7 +3405,7 @@ describe('Dash Service', function() {
     });
     it('will give error with unknown', function() {
       var addresses = [
-        dashcore.Address('XjxDQFjTNEP9dcrJhBLvy5i1Dobz4x1LJN'),
+        skeincore.Address('XjxDQFjTNEP9dcrJhBLvy5i1Dobz4x1LJN'),
         0,
       ];
       var dashd = new DashService(baseConfig);
@@ -3912,7 +3912,7 @@ describe('Dash Service', function() {
         done();
       });
     });
-    it('will getblock as dashcore object from height', function(done) {
+    it('will getblock as skeincore object from height', function(done) {
       var dashd = new DashService(baseConfig);
       var getBlock = sinon.stub().callsArgWith(2, null, {
         result: blockhex
@@ -3930,11 +3930,11 @@ describe('Dash Service', function() {
         should.not.exist(err);
         getBlock.args[0][0].should.equal('00000000050a6d07f583beba2d803296eb1e9d4980c4a20f206c584e89a4f02b');
         getBlock.args[0][1].should.equal(false);
-        block.should.be.instanceof(dashcore.Block);
+        block.should.be.instanceof(skeincore.Block);
         done();
       });
     });
-    it('will getblock as dashcore object', function(done) {
+    it('will getblock as skeincore object', function(done) {
       var dashd = new DashService(baseConfig);
       var getBlock = sinon.stub().callsArgWith(2, null, {
         result: blockhex
@@ -3952,7 +3952,7 @@ describe('Dash Service', function() {
         getBlock.callCount.should.equal(1);
         getBlock.args[0][0].should.equal('00000000050a6d07f583beba2d803296eb1e9d4980c4a20f206c584e89a4f02b');
         getBlock.args[0][1].should.equal(false);
-        block.should.be.instanceof(dashcore.Block);
+        block.should.be.instanceof(skeincore.Block);
         done();
       });
     });
@@ -3973,12 +3973,12 @@ describe('Dash Service', function() {
         should.not.exist(err);
         getBlockHash.callCount.should.equal(0);
         getBlock.callCount.should.equal(1);
-        block.should.be.instanceof(dashcore.Block);
+        block.should.be.instanceof(skeincore.Block);
         dashd.getBlock(hash, function(err, block) {
           should.not.exist(err);
           getBlockHash.callCount.should.equal(0);
           getBlock.callCount.should.equal(1);
-          block.should.be.instanceof(dashcore.Block);
+          block.should.be.instanceof(skeincore.Block);
           done();
         });
       });
@@ -4001,12 +4001,12 @@ describe('Dash Service', function() {
         should.not.exist(err);
         getBlockHash.callCount.should.equal(1);
         getBlock.callCount.should.equal(1);
-        block.should.be.instanceof(dashcore.Block);
+        block.should.be.instanceof(skeincore.Block);
         dashd.getBlock(0, function(err, block) {
           should.not.exist(err);
           getBlockHash.callCount.should.equal(2);
           getBlock.callCount.should.equal(1);
-          block.should.be.instanceof(dashcore.Block);
+          block.should.be.instanceof(skeincore.Block);
           done();
         });
       });
@@ -4547,7 +4547,7 @@ describe('Dash Service', function() {
   });
 
   describe('#sendTransaction', function(done) {
-    var tx = dashcore.Transaction(txhex);
+    var tx = skeincore.Transaction(txhex);
     it('will give rpc error', function() {
       var dashd = new DashService(baseConfig);
       var sendRawTransaction = sinon.stub().callsArgWith(3, {message: 'error', code: -1});
@@ -4605,7 +4605,7 @@ describe('Dash Service', function() {
           sendRawTransaction: sendRawTransaction
         }
       });
-      var transaction = dashcore.Transaction();
+      var transaction = skeincore.Transaction();
       (function() {
         dashd.sendTransaction(transaction);
       }).should.throw(Error);
@@ -4727,7 +4727,7 @@ describe('Dash Service', function() {
           return done(err);
         }
         should.exist(tx);
-        tx.should.be.an.instanceof(dashcore.Transaction);
+        tx.should.be.an.instanceof(skeincore.Transaction);
         done();
       });
     });
@@ -4746,11 +4746,11 @@ describe('Dash Service', function() {
           return done(err);
         }
         should.exist(tx);
-        tx.should.be.an.instanceof(dashcore.Transaction);
+        tx.should.be.an.instanceof(skeincore.Transaction);
 
         dashd.getTransaction('txid', function(err, tx) {
           should.exist(tx);
-          tx.should.be.an.instanceof(dashcore.Transaction);
+          tx.should.be.an.instanceof(skeincore.Transaction);
           getRawTransaction.callCount.should.equal(1);
           done();
         });
@@ -4760,7 +4760,7 @@ describe('Dash Service', function() {
   });
 
   describe('#getDetailedTransaction', function() {
-    var txBuffer = new Buffer('01000000016f95980911e01c2c664b3e78299527a47933aac61a515930a8fe0213d1ac9abe01000000da0047304402200e71cda1f71e087c018759ba3427eb968a9ea0b1decd24147f91544629b17b4f0220555ee111ed0fc0f751ffebf097bdf40da0154466eb044e72b6b3dcd5f06807fa01483045022100c86d6c8b417bff6cc3bbf4854c16bba0aaca957e8f73e19f37216e2b06bb7bf802205a37be2f57a83a1b5a8cc511dc61466c11e9ba053c363302e7b99674be6a49fc0147522102632178d046673c9729d828cfee388e121f497707f810c131e0d3fc0fe0bd66d62103a0951ec7d3a9da9de171617026442fcd30f34d66100fab539853b43f508787d452aeffffffff0240420f000000000017a9148a31d53a448c18996e81ce67811e5fb7da21e4468738c9d6f90000000017a9148ce5408cfeaddb7ccb2545ded41ef478109454848700000000', 'hex');
+    var txBuffer = Buffer.from('01000000016f95980911e01c2c664b3e78299527a47933aac61a515930a8fe0213d1ac9abe01000000da0047304402200e71cda1f71e087c018759ba3427eb968a9ea0b1decd24147f91544629b17b4f0220555ee111ed0fc0f751ffebf097bdf40da0154466eb044e72b6b3dcd5f06807fa01483045022100c86d6c8b417bff6cc3bbf4854c16bba0aaca957e8f73e19f37216e2b06bb7bf802205a37be2f57a83a1b5a8cc511dc61466c11e9ba053c363302e7b99674be6a49fc0147522102632178d046673c9729d828cfee388e121f497707f810c131e0d3fc0fe0bd66d62103a0951ec7d3a9da9de171617026442fcd30f34d66100fab539853b43f508787d452aeffffffff0240420f000000000017a9148a31d53a448c18996e81ce67811e5fb7da21e4468738c9d6f90000000017a9148ce5408cfeaddb7ccb2545ded41ef478109454848700000000', 'hex');
     var info = {
       blockHash: '00000000000ec715852ea2ecae4dc8563f62d603c820f81ac284cd5be0a944d6',
       height: 530482,

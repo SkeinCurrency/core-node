@@ -7,8 +7,8 @@ var index = require('..');
 var log = index.log;
 
 var chai = require('chai');
-var dashcore = require('@dashevo/dashcore-lib');
-var BN = dashcore.crypto.BN;
+var skeincore = require('@skeincurrency/core-lib');
+var BN = skeincore.crypto.BN;
 var async = require('async');
 var rimraf = require('rimraf');
 var dashd;
@@ -23,8 +23,8 @@ var blockHashes = [];
 var utxos;
 var client;
 var coinbasePrivateKey;
-var privateKey = dashcore.PrivateKey();
-var destKey = dashcore.PrivateKey();
+var privateKey = skeincore.PrivateKey();
+var destKey = skeincore.PrivateKey();
 
 describe('Dashd Functionality', function() {
 
@@ -32,8 +32,8 @@ describe('Dashd Functionality', function() {
     this.timeout(200000);
 
     // Add the regtest network
-    dashcore.Networks.enableRegtest();
-    var regtestNetwork = dashcore.Networks.get('regtest');
+    skeincore.Networks.enableRegtest();
+    var regtestNetwork = skeincore.Networks.get('regtest');
 
     var datadir = __dirname + '/data';
 
@@ -46,7 +46,7 @@ describe('Dashd Functionality', function() {
       dashd = require('../').services.Dash({
         spawn: {
           datadir: datadir,
-          exec: path.resolve(__dirname, process.env.HOME, './.dashcore/data/dashd')
+          exec: path.resolve(__dirname, process.env.HOME, './.skeincore/data/dashd')
         },
         node: {
           network: regtestNetwork,
@@ -212,7 +212,7 @@ describe('Dashd Functionality', function() {
     [0,1,2,3,4,5,6,7,8,9].forEach(function(i) {
       it('for tx ' + i, function(done) {
         var txhex = transactionData[i];
-        var tx = new dashcore.Transaction();
+        var tx = new skeincore.Transaction();
         tx.fromString(txhex);
         dashd.getTransaction(tx.hash, function(err, response) {
           if (err) {
@@ -237,7 +237,7 @@ describe('Dashd Functionality', function() {
     [0,1,2,3,4,5,6,7,8,9].forEach(function(i) {
       it('for tx ' + i, function(done) {
         var txhex = transactionData[i];
-        var tx = new dashcore.Transaction();
+        var tx = new skeincore.Transaction();
         tx.fromString(txhex);
         dashd.getRawTransaction(tx.hash, function(err, response) {
           if (err) {
@@ -328,11 +328,11 @@ describe('Dashd Functionality', function() {
     it('will not error and return the transaction hash', function(done) {
 
       // create and sign the transaction
-      var tx = dashcore.Transaction();
+      var tx = skeincore.Transaction();
       tx.from(utxos[0]);
       tx.change(privateKey.toAddress());
       tx.to(destKey.toAddress(), utxos[0].amount * 1e8 - 1000);
-      tx.sign(dashcore.PrivateKey.fromWIF(utxos[0].privateKeyWIF));
+      tx.sign(skeincore.PrivateKey.fromWIF(utxos[0].privateKeyWIF));
 
       // test sending the transaction
       dashd.sendTransaction(tx.serialize(), function(err, hash) {
@@ -346,7 +346,7 @@ describe('Dashd Functionality', function() {
     });
 
     it('will throw an error if an unsigned transaction is sent', function(done) {
-      var tx = dashcore.Transaction();
+      var tx = skeincore.Transaction();
       tx.from(utxos[1]);
       tx.change(privateKey.toAddress());
       tx.to(destKey.toAddress(), utxos[1].amount * 1e8 - 1000);
@@ -359,7 +359,7 @@ describe('Dashd Functionality', function() {
     });
 
     it('will throw an error for unexpected types (tx decode failed)', function(done) {
-      var garbage = new Buffer('abcdef', 'hex');
+      var garbage = Buffer.from('abcdef', 'hex');
       dashd.sendTransaction(garbage, function(err, hash) {
         should.exist(err);
         should.not.exist(hash);
@@ -374,11 +374,11 @@ describe('Dashd Functionality', function() {
     });
 
     it('will emit "tx" events', function(done) {
-      var tx = dashcore.Transaction();
+      var tx = skeincore.Transaction();
       tx.from(utxos[2]);
       tx.change(privateKey.toAddress());
       tx.to(destKey.toAddress(), utxos[2].amount * 1e8 - 1000);
-      tx.sign(dashcore.PrivateKey.fromWIF(utxos[2].privateKeyWIF));
+      tx.sign(skeincore.PrivateKey.fromWIF(utxos[2].privateKeyWIF));
 
       var serialized = tx.serialize();
 

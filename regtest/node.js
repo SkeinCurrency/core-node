@@ -9,7 +9,7 @@ var log = index.log;
 log.debug = function() {};
 
 var chai = require('chai');
-var dashcore = require('@dashevo/dashcore-lib');
+var skeincore = require('@skeincurrency/core-lib');
 var rimraf = require('rimraf');
 var node;
 
@@ -17,7 +17,7 @@ var should = chai.should();
 
 var DashdRPC = require('@dashevo/dashd-rpc');
 var index = require('..');
-var Transaction = dashcore.Transaction;
+var Transaction = skeincore.Transaction;
 var DashcoreNode = index.Node;
 var DashService = index.services.Dash;
 var testWIF = 'cSdkPxkAjA4HDr5VHgsebAPDEh9Gyub4HK8UJr2DFGGqKKy4K5sG';
@@ -36,7 +36,7 @@ describe('Node Functionality', function() {
 
     var datadir = __dirname + '/data';
 
-    testKey = dashcore.PrivateKey(testWIF);
+    testKey = skeincore.PrivateKey(testWIF);
 
     rimraf(datadir + '/regtest', function(err) {
 
@@ -53,7 +53,7 @@ describe('Node Functionality', function() {
             config: {
               spawn: {
                 datadir: datadir,
-                exec: path.resolve(__dirname, process.env.HOME, './.dashcore/data/dashd')
+                exec: path.resolve(__dirname, process.env.HOME, './.skeincore/data/dashd')
               }
             }
           }
@@ -62,7 +62,7 @@ describe('Node Functionality', function() {
 
       node = new DashcoreNode(configuration);
 
-      regtest = dashcore.Networks.get('regtest');
+      regtest = skeincore.Networks.get('regtest');
       should.exist(regtest);
 
       node.on('error', function(err) {
@@ -255,19 +255,19 @@ describe('Node Functionality', function() {
           }
         });
 
-        testKey2 = dashcore.PrivateKey.fromWIF('cNfF4jXiLHQnFRsxaJyr2YSGcmtNYvxQYSakNhuDGxpkSzAwn95x');
+        testKey2 = skeincore.PrivateKey.fromWIF('cNfF4jXiLHQnFRsxaJyr2YSGcmtNYvxQYSakNhuDGxpkSzAwn95x');
         address2 = testKey2.toAddress(regtest).toString();
 
-        testKey3 = dashcore.PrivateKey.fromWIF('cVTYQbaFNetiZcvxzXcVMin89uMLC43pEBMy2etgZHbPPxH5obYt');
+        testKey3 = skeincore.PrivateKey.fromWIF('cVTYQbaFNetiZcvxzXcVMin89uMLC43pEBMy2etgZHbPPxH5obYt');
         address3 = testKey3.toAddress(regtest).toString();
 
-        testKey4 = dashcore.PrivateKey.fromWIF('cPNQmfE31H2oCUFqaHpfSqjDibkt7XoT2vydLJLDHNTvcddCesGw');
+        testKey4 = skeincore.PrivateKey.fromWIF('cPNQmfE31H2oCUFqaHpfSqjDibkt7XoT2vydLJLDHNTvcddCesGw');
         address4 = testKey4.toAddress(regtest).toString();
 
-        testKey5 = dashcore.PrivateKey.fromWIF('cVrzm9gCmnzwEVMGeCxY6xLVPdG3XWW97kwkFH3H3v722nb99QBF');
+        testKey5 = skeincore.PrivateKey.fromWIF('cVrzm9gCmnzwEVMGeCxY6xLVPdG3XWW97kwkFH3H3v722nb99QBF');
         address5 = testKey5.toAddress(regtest).toString();
 
-        testKey6 = dashcore.PrivateKey.fromWIF('cPfMesNR2gsQEK69a6xe7qE44CZEZavgMUak5hQ74XDgsRmmGBYF');
+        testKey6 = skeincore.PrivateKey.fromWIF('cPfMesNR2gsQEK69a6xe7qE44CZEZavgMUak5hQ74XDgsRmmGBYF');
         address6 = testKey6.toAddress(regtest).toString();
 
         var tx = new Transaction();
@@ -660,7 +660,7 @@ describe('Node Functionality', function() {
       });
 
       it('will update the mempool index after new tx', function(done) {
-        var memAddress = dashcore.PrivateKey().toAddress(node.network).toString();
+        var memAddress = skeincore.PrivateKey().toAddress(node.network).toString();
         var tx = new Transaction();
         tx.from(unspentOutput);
         tx.to(memAddress, unspentOutput.satoshis - 2000);

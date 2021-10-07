@@ -1,13 +1,13 @@
 {
-  "name": "@dashevo/dashcore-node",
+  "name": "@skeincurrency/core-node",
   "description": "Full node with extended capabilities using Dashcore and Dash Core (dashd)",
   "author": "BitPay <dev@bitpay.com>",
   "version": "6.2.3",
   "main": "./index.js",
-  "repository": "git://github.com/dashevo/dashcore-node.git",
-  "homepage": "https://github.com/dashevo/dashcore-node",
+  "repository": "git://github.com/skeincurrency/core-node.git",
+  "homepage": "https://github.com/skeincurrency/core-node",
   "bugs": {
-    "url": "https://github.com/dashevo/dashcore-node/issues"
+    "url": "https://github.com/skeincurrency/core-node/issues"
   },
   "contributors": [
     {
@@ -27,7 +27,7 @@
     }
   ],
   "bin": {
-    "dashcore-node": "./bin/dashcore-node"
+    "core-node": "./bin/core-node"
   },
   "scripts": {
     "test": "mocha -R spec --recursive",
@@ -43,8 +43,8 @@
     "dashd"
   ],
   "dependencies": {
-    "@dashevo/dashcore-lib": "^0.19.25",
     "@dashevo/dashd-rpc": "^2.3.0",
+    "@skeincurrency/core-lib": "^0.19.26",
     "async": "^2.6.1",
     "body-parser": "^1.18.3",
     "colors": "^1.3.3",

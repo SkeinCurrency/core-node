@@ -6,7 +6,7 @@ var spawn = require('child_process').spawn;
 
 var DashdRPC = require('@dashevo/dashd-rpc');
 var rimraf = require('rimraf');
-var dashcore = require('@dashevo/dashcore-lib');
+var skeincore = require('@skeincurrency/core-lib');
 var chai = require('chai');
 var should = chai.should();
 
@@ -19,7 +19,7 @@ var DashService = index.services.Dash;
 describe('Dash Cluster', function() {
   var node;
   var daemons = [];
-  var execPath = path.resolve(__dirname, process.env.HOME, './.dashcore/data/dashd')
+  var execPath = path.resolve(__dirname, process.env.HOME, './.skeincore/data/dashd')
   var nodesConf = [
     {
       datadir: path.resolve(__dirname, './data/node1'),
@@ -133,7 +133,7 @@ describe('Dash Cluster', function() {
       ]
     };
 
-    var regtest = dashcore.Networks.get('regtest');
+    var regtest = skeincore.Networks.get('regtest');
     should.exist(regtest);
 
     node = new DashcoreNode(configuration);

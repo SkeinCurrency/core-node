@@ -25,7 +25,7 @@ describe('#add', function() {
         throw err;
       }
       fs.writeFile(
-        testDir + '/s0/s1/dashcore-node.json',
+        testDir + '/s0/s1/core-node.json',
         JSON.stringify(startConfig),
         function(err) {
           if (err) {
@@ -90,12 +90,12 @@ describe('#add', function() {
       });
     });
 
-    it('will update dashcore-node.json services', function(done) {
+    it('will update core-node.json services', function(done) {
       var callCount = 0;
       var oldPackage = {
         dependencies: {
-          '@dashevo/dashcore-lib': '^v0.15.4',
-          '@dashevo/dashcore-node': '^v3.0.7'
+          '@skeincurrency/core-lib': '^v0.15.4',
+          '@skeincurrency/core-node': '^v3.0.7'
         }
       };
       var spawn = sinon.stub().returns({
@@ -130,7 +130,7 @@ describe('#add', function() {
         services: ['a', 'b', 'c']
       }, function(err) {
         should.not.exist(err);
-        var configPath = path.resolve(testDir, 's0/s1/dashcore-node.json');
+        var configPath = path.resolve(testDir, 's0/s1/core-node.json');
         var config = JSON.parse(fs.readFileSync(configPath));
         config.services.should.deep.equal(['a','b','c']);
         done();

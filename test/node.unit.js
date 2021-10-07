@@ -2,8 +2,8 @@
 
 var should = require('chai').should();
 var sinon = require('sinon');
-var dashcore = require('@dashevo/dashcore-lib');
-var Networks = dashcore.Networks;
+var skeincore = require('@skeincurrency/core-lib');
+var Networks = skeincore.Networks;
 var proxyquire = require('proxyquire');
 var util = require('util');
 var BaseService = require('../lib/service');
@@ -425,7 +425,7 @@ describe('Dashcore Node', function() {
 
   describe('#getNetworkName', function() {
     afterEach(function() {
-      dashcore.Networks.disableRegtest();
+      skeincore.Networks.disableRegtest();
     });
     it('it will return the network name for livenet', function() {
       var node = new Node(baseConfig);

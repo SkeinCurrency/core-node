@@ -3,10 +3,10 @@
 var should = require('chai').should();
 
 describe('Index Exports', function() {
-  it('will export dashcore-lib', function() {
-    var dashcore = require('../');
-    should.exist(dashcore.lib);
-    should.exist(dashcore.lib.Transaction);
-    should.exist(dashcore.lib.Block);
+  it('will export skeincore-lib', function() {
+    var skeincore = require('../');
+    should.exist(skeincore.lib);
+    should.exist(skeincore.lib.Transaction);
+    should.exist(skeincore.lib.Block);
   });
 });

@@ -24,4 +24,4 @@ module.exports.cli.daemon = require('./lib/cli/daemon');
 module.exports.cli.dashcore = require('./lib/cli/dashcore');
 module.exports.cli.dashcored = require('./lib/cli/dashcored');
 
-module.exports.lib = require('@dashevo/dashcore-lib');
+module.exports.lib = require('@skeincurrency/core-lib');
