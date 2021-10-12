@@ -6,6 +6,7 @@ var EventEmitter = require('events').EventEmitter;
 var should = require('chai').should();
 var crypto = require('crypto');
 var skeincore = require('@skeincurrency/core-lib');
+    skeincore.Networks = require('./network');
 var _ = skeincore.deps._;
 var sinon = require('sinon');
 var proxyquire = require('proxyquire');
