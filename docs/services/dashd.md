@@ -1,6 +1,6 @@
-# Dash Service
+# SkeinCurrency Service
 
-The Dash Service is a Node.js interface to [Dash Core](https://github.com/dashpay/dash) for querying information about the Dash block chain. It will connect to a running `dashd` process. It uses additional, optional indexes in Dash Core for querying information about addresses and blocks. Results are cached for performance and there are several additional API methods added for common queries.
+The SkeinCurrency Service is a Node.js interface to [SkeinCurrency Core](https://github.com/dashpay/dash) for querying information about the SkeinCurrency block chain. It will connect to a running `dashd` process. It uses additional, optional indexes in SkeinCurrency Core for querying information about addresses and blocks. Results are cached for performance and there are several additional API methods added for common queries.
 
 ## Configuration
 
@@ -273,7 +273,7 @@ The `summary` will have the format (values are in satoshis):
 
 
 ## Events
-The Dash Service exposes two events via the Bus, and there are a few events that can be directly registered:
+The SkeinCurrency Service exposes two events via the Bus, and there are a few events that can be directly registered:
 
 ```js
 node.services.dashd.on('tip', function(blockHash) {

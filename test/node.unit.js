@@ -10,7 +10,7 @@ var BaseService = require('../lib/service');
 var index = require('../lib');
 var log = index.log;
 
-describe('Dashcore Node', function() {
+describe('SkeinCurrency Node', function() {
 
   var baseConfig = {};
 

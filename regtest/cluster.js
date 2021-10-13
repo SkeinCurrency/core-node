@@ -16,7 +16,7 @@ log.debug = function() {};
 var DashcoreNode = index.Node;
 var DashService = index.services.Dash;
 
-describe('Dash Cluster', function() {
+describe('SkeinCurrency Cluster', function() {
   var node;
   var daemons = [];
   var execPath = path.resolve(__dirname, process.env.HOME, './.skeincore/data/dashd')

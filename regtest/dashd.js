@@ -60,7 +60,7 @@ describe('Dashd Functionality', function() {
         log.error('error="%s"', err.message);
       });
 
-      log.info('Waiting for Dash Core to initialize...');
+      log.info('Waiting for SkeinCurrency Core to initialize...');
 
       dashd.start(function() {
         log.info('Dashd started');

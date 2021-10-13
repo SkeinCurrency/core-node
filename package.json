@@ -1,6 +1,6 @@
 {
   "name": "@skeincurrency/core-node",
-  "description": "Full node with extended capabilities using Dashcore and Dash Core (dashd)",
+  "description": "Full node with extended capabilities using SkeinCurrency and Dash Core (dashd)",
   "author": "BitPay <dev@bitpay.com>",
   "version": "6.2.3",
   "main": "./index.js",
@@ -40,7 +40,8 @@
   },
   "tags": [
     "dash",
-    "dashd"
+    "dashd",
+    "skeincurrency"
   ],
   "dependencies": {
     "@dashevo/dashd-rpc": "^2.3.0",
@@ -77,5 +78,8 @@
     "rimraf": "^2.6.3",
     "sinon": "^2.4.1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
 }

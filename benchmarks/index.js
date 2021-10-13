@@ -5,10 +5,10 @@ var dashdRPC = require('@dashevo/dashd-rpc');
 var async = require('async');
 var maxTime = 20;
 
-console.log('Dash Service native interface vs. Dash JSON RPC interface');
+console.log('SkeinCurrency Service native interface vs. SkeinCurrency JSON RPC interface');
 console.log('----------------------------------------------------------------------');
 
-// To run the benchmarks a fully synced Dash Core directory is needed. The RPC comands
+// To run the benchmarks a fully synced SkeinCurrency Core directory is needed. The RPC comands
 // can be modified to match the settings in dash.conf.
 
 var fixtureData = {
@@ -48,7 +48,7 @@ dashd.start(function(err) {
 
 dashd.on('ready', function() {
 
-  console.log('Dash Core ready');
+  console.log('SkeinCurrency Core ready');
 
   var client = new dashdRPC({
     host: 'localhost',

@@ -26,7 +26,7 @@ var DashService = proxyquire('../../lib/services/dashd', {
 });
 var defaultDashConf = fs.readFileSync(path.resolve(__dirname, '../data/default.dash.conf'), 'utf8');
 
-describe('Dash Service', function() {
+describe('SkeinCurrency Service', function() {
   var txhex = '01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff0704ffff001d0104ffffffff0100f2052a0100000043410496b538e853519c726a2c91e61ec11600ae1390813a627c66fb8be7947be63c52da7589379515d4e0a604f8141781e62294721166bf621e73a82cbf2342c858eeac00000000';
 
   var baseConfig = {
@@ -2109,7 +2109,7 @@ describe('Dash Service', function() {
       dashd.options = {};
       dashd.start(function(err) {
         err.should.be.instanceof(Error);
-        err.message.should.match(/Dash configuration options/);
+        err.message.should.match(/SkeinCurrency configuration options/);
       });
       done();
     });
