@@ -20,7 +20,7 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: '12'
+          node-version: '14.17'
 
       - name: Enable NPM cache
         uses: actions/cache@v2
@@ -34,7 +34,7 @@ jobs:
         uses: dashevo/gh-action-check-package-lock@v1
 
       - name: Install NPM dependencies
-        run: npm ci
+        run: npm i -g npm && npm ci
 
       - name: Run jshint
         run: npm run jshint
@@ -49,6 +49,10 @@ jobs:
     if: ${{ github.event_name == 'release' }}
     steps:
       - uses: actions/checkout@v2
+      
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.17'
 
       - name: Check package version matches tag
         uses: geritol/match-tag-to-package-version@0.1.0
@@ -64,7 +68,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install NPM dependencies
-        run: npm ci
+        run: npm i -g npm && npm ci
 
       - name: Set release tag
         uses: actions/github-script@v3
