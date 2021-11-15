@@ -2,7 +2,7 @@
   "name": "@skeincurrency/core-node",
   "description": "Full node with extended capabilities using SkeinCurrency and Dash Core (dashd)",
   "author": "BitPay <dev@bitpay.com>",
-  "version": "6.2.3",
+  "version": "6.2.2",
   "main": "./index.js",
   "repository": "git://github.com/skeincurrency/core-node.git",
   "homepage": "https://github.com/skeincurrency/core-node",
